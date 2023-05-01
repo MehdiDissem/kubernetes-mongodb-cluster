@@ -39,6 +39,7 @@ kind: Service
 metadata:
   name: mongo-service
 spec:
+type: NodePort
   selector:
   #take the selector from the label selector on the deployment !!!
     app: mongo
@@ -48,3 +49,4 @@ spec:
       port: 27017
       #targetport should be the same as container port
       targetPort: 27017
+      nodePort: 30100
