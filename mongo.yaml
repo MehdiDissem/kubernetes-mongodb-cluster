@@ -24,6 +24,12 @@ spec:
         image: mongo:5.0
         ports:
         - containerPort: 27017 #port taken from mongo dockerhub (connect to mongodb from another Docker container)
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+            name: mongo-secret
+            key: mongo-user
 
 ---
 #starting with service
