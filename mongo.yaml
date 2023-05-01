@@ -24,3 +24,21 @@ spec:
         image: mongo:5.0
         ports:
         - containerPort: 27017 #port taken from mongo dockerhub (connect to mongodb from another Docker container)
+
+---
+#starting with service
+#getting the service https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+  #take the selector from the label selector on the deployment !!!
+    app: mongo
+  ports:
+    - protocol: TCP
+    #good practice to put the port same as targetPort, but it is not mandatory
+      port: 27017
+      #targetport should be the same as container port
+      targetPort: 27017
