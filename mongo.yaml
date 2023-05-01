@@ -2,22 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: mongo-deployment
   labels:
-    app: nginx
+    app: mongo
+ #the spec below defines all the pods that match the labels, that belongs to the deployments
 spec:
-  replicas: 3
+#only one replica
+  replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: mongo
       #config of the pod within a deployment
   template:
     metadata:
       labels:
-        app: nginx
+        app: mongo
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.14.2
+      - name: mongodb
+      #using the tag mongo version 5.0
+        image: mongo:5.0
         ports:
-        - containerPort: 80
+        - containerPort: 27017 #port taken from mongo dockerhub (connect to mongodb from another Docker container)
