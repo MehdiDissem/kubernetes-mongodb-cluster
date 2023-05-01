@@ -1,18 +1,14 @@
-#kubernetes deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo-deployment
   labels:
     app: mongo
- #the spec below defines all the pods that match the labels, that belongs to the deployments
 spec:
-#only one replica
   replicas: 1
   selector:
     matchLabels:
       app: mongo
-      #config of the pod within a deployment
   template:
     metadata:
       labels:
@@ -20,33 +16,29 @@ spec:
     spec:
       containers:
       - name: mongodb
-      #using the tag mongo version 5.0
         image: mongo:5.0
         ports:
-        - containerPort: 27017 #port taken from mongo dockerhub (connect to mongodb from another Docker container)
+        - containerPort: 27017
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-            name: mongo-secret
-            key: mongo-user
-
+              name: mongo-secret
+              key: mongo-user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password  
 ---
-#starting with service
-#getting the service https://kubernetes.io/docs/concepts/services-networking/service/
 apiVersion: v1
 kind: Service
 metadata:
   name: mongo-service
 spec:
-type: NodePort
   selector:
-  #take the selector from the label selector on the deployment !!!
     app: mongo
   ports:
     - protocol: TCP
-    #good practice to put the port same as targetPort, but it is not mandatory
       port: 27017
-      #targetport should be the same as container port
       targetPort: 27017
-      nodePort: 30100
